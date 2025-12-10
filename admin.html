@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Admin – Lost Items</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f2f2f2;
+        }
+        h1 { text-align: center; }
+
+        .item-card {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .image {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .btn {
+            padding: 6px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 6px;
+            margin-right: 10px;
+        }
+
+        .btn-found { background: green; color: white; }
+        .btn-delete { background: red; color: white; }
+    </style>
+</head>
+<body>
+
+    <h1>Admin Panel – Lost Items</h1>
+
+    <div id="items-container">Loading items...</div>
+
+    <script>
+        const API_BASE = "http://localhost:5000/api";
+
+        // Load all items
+        async function loadItems() {
+            const container = document.getElementById("items-container");
+            container.innerHTML = "Loading items...";
+
+            try {
+                const res = await fetch(`${API_BASE}/lost-items`);
+                const data = await res.json();
+
+                if (!Array.isArray(data)) {
+                    container.innerHTML = "No items found.";
+                    return;
+                }
+
+                container.innerHTML = "";
+
+                data.forEach(item => {
+                    const card = document.createElement("div");
+                    card.className = "item-card";
+
+                    card.innerHTML = `
+                        <h3>${item.title}</h3>
+                        <p><strong>Type:</strong> ${item.type}</p>
+                        <p><strong>Description:</strong> ${item.description}</p>
+                        <p><strong>Status:</strong> ${item.status ?? "lost"}</p>
+                        <img class="image" src="http://localhost:5000${item.image_url}" alt="No Image"/>
+                        <br><br>
+                        <button class="btn btn-found" onclick="markFound(${item.id})">Mark as Found</button>
+                        <button class="btn btn-delete" onclick="deleteItem(${item.id})">Delete</button>
+                    `;
+
+                    container.appendChild(card);
+                });
+
+            } catch (err) {
+                container.innerHTML = "Failed to load data.";
+            }
+        }
+
+        // Mark item as found
+        async function markFound(id) {
+            const confirmAction = confirm("Mark this item as FOUND?");
+            if (!confirmAction) return;
+
+            await fetch(`${API_BASE}/admin/lost-items/${id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ status: "found" })
+            });
+
+            alert("Item marked as found!");
+            loadItems();
+        }
+
+        // Delete item
+        async function deleteItem(id) {
+            const confirmDelete = confirm("Delete this item permanently?");
+            if (!confirmDelete) return;
+
+            await fetch(`${API_BASE}/admin/lost-items/${id}`, {
+                method: "DELETE"
+            });
+
+            alert("Item deleted!");
+            loadItems();
+        }
+
+        loadItems();
+    </script>
+
+</body>
+</html>

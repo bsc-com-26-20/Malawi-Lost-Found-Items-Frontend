@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse Lost Items - MW Lost & Found</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body { background-color: #010c18; }
+
+    .floating-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #2563eb;
+      color: white;
+      font-weight: bold;
+      padding: 12px 20px;
+      border-radius: 50px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      text-decoration: none;
+      transition: background 0.3s;
+      z-index: 100;
+    }
+    .floating-btn:hover { background-color: #1d4ed8; }
+
+    .item-row {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      background-color: #1a202c;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+      gap: 16px;
+    }
+    .item-row img { width: 150px; height: 150px; object-fit: cover; border-radius: 6px; }
+    .item-details { flex: 1; }
+    .item-title { font-size: 1.25rem; font-weight: 600; color: #f9fafb; }
+    .item-desc, .item-location { color: #cbd5e1; }
+    .whatsapp-link { color: #3b82f6; margin-top: 8px; display: inline-block; }
+
+    nav { transition: all 0.3s ease; }
+    nav.scrolled,
+    nav.dark-bg {
+      background-color: rgba(0,0,0,0.95);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+      padding-top: 8px;
+      padding-bottom: 8px;
+    }
+
+    .filter-section input,
+    .filter-section select {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: none;
+      outline: none;
+      background-color: #1a202c;
+      color: #f9fafb;
+      min-width: 150px;
+    }
+    .filter-section button {
+      padding: 8px 16px;
+      border-radius: 6px;
+      border: none;
+      background-color: #2563eb;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .filter-section button:hover { background-color: #1d4ed8; }
+
+    /* Hamburger */
+    .hamburger { display: none; flex-direction: column; justify-content: space-between; width: 25px; height: 20px; cursor: pointer; }
+    .hamburger span { display: block; height: 3px; background: white; border-radius: 2px; transition: all 0.3s; }
+    .nav-links { display: flex; gap: 1.5rem; }
+
+    @media (max-width: 640px) {
+      .item-row { flex-direction: column; align-items: flex-start; }
+      .item-row img { width: 100%; height: auto; }
+      h2.text-4xl { font-size: 1.75rem; line-height: 1.2; }
+      p { font-size: 0.9rem; }
+      .filter-section { flex-direction: column; align-items: flex-start; gap: 4px; }
+      .filter-section label, .filter-section select { font-size: 0.9rem; min-width: auto; }
+      .floating-btn { bottom: 12px; right: 12px; padding: 10px 16px; font-size: 14px; }
+
+      .hamburger { display: flex; }
+      .nav-links { display: none; flex-direction: column; width: 100%; margin-top: 8px; }
+      .nav-links.show { display: flex; }
+      .nav-links a { padding: 8px 0; }
+    }
+  </style>
+</head>
+<body class="text-white">
+
+  <!-- NAVBAR -->
+  <nav id="navbar" class="fixed top-0 left-0 w-full px-6 py-4 flex justify-between items-center z-50 bg-transparent">
+    <h1 class="text-2xl font-bold">MW Lost & Found</h1>
+    <div class="flex items-center">
+      <div class="nav-links">
+        <a href="index.html" class="hover:text-blue-400">Home</a>
+        <a href="post.html" class="hover:text-blue-400">Post Item</a>
+        <a href="browse.html" class="hover:text-blue-400">Browse</a>
+      </div>
+      <div class="hamburger ml-4" id="hamburgerBtn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <section class="pt-28 pb-6 px-6 text-center">
+    <h2 class="text-4xl font-extrabold mb-2">Latest Lost Items</h2>
+    <p class="opacity-80">Click an item to contact the owner via WhatsApp</p>
+  </section>
+
+  <!-- FILTERS -->
+  <section class="container mx-auto px-6 pb-4 filter-section flex flex-wrap gap-2 items-center">
+    <input type="text" id="searchInput" placeholder="Search by title or description" class="flex-1"/>
+    <select id="typeFilter">
+      <option value="">All Types</option>
+      <option value="Lost">Lost</option>
+      <option value="Found">Found</option>
+    </select>
+    <button id="searchBtn">Search</button>
+  </section>
+
+  <!-- ITEMS LIST -->
+  <section class="container mx-auto px-6 pb-20">
+    <div id="items"></div>
+  </section>
+
+  <!-- Floating Post Item Button -->
+  <a href="post.html" class="floating-btn">+ Post Item</a>
+
+  <script>
+    const API_BASE = "http://localhost:5000/api/lost-items";
+    let allItems = [];
+
+    async function loadItems() {
+      const container = document.getElementById("items");
+      container.innerHTML = "<p class='text-white'>Loading items...</p>";
+
+      try {
+        const res = await fetch(API_BASE);
+        if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+        allItems = await res.json();
+        if (!Array.isArray(allItems) || allItems.length === 0) {
+          container.innerHTML = "<p class='text-white'>No lost items found.</p>";
+          return;
+        }
+        renderItems(allItems);
+      } catch (err) {
+        console.error(err);
+        container.innerHTML = `<div class="text-red-400 bg-red-900 p-4 rounded">
+          Failed to load items: ${err.message}
+        </div>`;
+      }
+    }
+
+    function renderItems(items) {
+      const container = document.getElementById("items");
+      if (items.length === 0) {
+        container.innerHTML = "<p class='text-white'>No items match your search.</p>";
+        return;
+      }
+      container.innerHTML = items.map(item => `
+        <div class="item-row">
+          ${item.image_url ? `<img src="http://localhost:5000${item.image_url}" alt="${item.title}"/>` 
+                           : `<div class="bg-gray-600 w-36 h-36 rounded flex items-center justify-center">No Image</div>`}
+          <div class="item-details">
+            <h3 class="item-title">${item.title}</h3>
+            <p class="item-desc">${item.description}</p>
+            <p class="item-location">${item.district} — ${item.area}</p>
+            <p class="item-type text-sm opacity-70">${item.type || ''}</p>
+            <a class="whatsapp-link" href="https://wa.me/${item.phone_number.replace('+','')}" target="_blank">
+              Contact Owner
+            </a>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    const searchInput = document.getElementById("searchInput");
+    const typeFilter = document.getElementById("typeFilter");
+    const searchBtn = document.getElementById("searchBtn");
+
+    searchInput.addEventListener("input", applyFilters);
+    typeFilter.addEventListener("change", applyFilters);
+    searchBtn.addEventListener("click", applyFilters);
+
+    function applyFilters() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const typeValue = typeFilter.value;
+      const filtered = allItems.filter(item => {
+        const matchesSearch = item.title.toLowerCase().includes(searchTerm) || 
+                              item.description.toLowerCase().includes(searchTerm);
+        const matchesType = typeValue === "" || item.type === typeValue;
+        return matchesSearch && matchesType;
+      });
+      renderItems(filtered);
+    }
+
+    loadItems();
+
+    // Navbar scroll effect
+    const navbar = document.getElementById("navbar");
+    window.addEventListener("scroll", () => {
+      if (!navLinks.classList.contains("show")) {
+        if (window.scrollY > 50) navbar.classList.add("scrolled");
+        else navbar.classList.remove("scrolled");
+      }
+    });
+
+    // Hamburger toggle
+    const hamburgerBtn = document.getElementById("hamburgerBtn");
+    const navLinks = document.querySelector(".nav-links");
+
+    hamburgerBtn.addEventListener("click", () => {
+      navLinks.classList.toggle("show");
+      navbar.classList.toggle("dark-bg"); // Darken navbar immediately
+    });
+  </script>
+
+</body>
+</html>

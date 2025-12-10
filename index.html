@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MW Lost & Found</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<style>
+  body { background-color: #010c18; color: #fff; scroll-behavior: smooth; }
+  nav.scrolled { background-color: rgba(0,0,0,0.85); box-shadow: 0 4px 6px rgba(0,0,0,0.5);}
+  .floating-btn {
+    position: fixed; bottom: 20px; right: 20px;
+    background-color: #2563eb; color: white; font-weight: bold;
+    padding: 12px 20px; border-radius: 50px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    text-decoration: none; transition: background 0.3s;
+  }
+  .floating-btn:hover { background-color: #1d4ed8; }
+  .feature-card {
+    background: #1a202c; padding: 20px; border-radius: 12px;
+    text-align: center; font-size: 1.1rem; font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4); transition: transform 0.3s;
+  }
+  .feature-card:hover { transform: translateY(-5px); }
+  .fade-section { opacity: 0; transform: translateY(30px); transition: 0.8s; }
+  .fade-section.visible { opacity: 1; transform: translateY(0); }
+  .floating-img { animation: float 3s ease-in-out infinite; }
+  @keyframes float { 0%,100%{transform: translateY(0);}50%{transform: translateY(-15px);} }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar" class="fixed top-0 left-0 w-full px-6 py-4 flex justify-between items-center z-50 transition-all duration-300 bg-transparent">
+  <h1 class="text-2xl font-bold">Malawi Lost & Found</h1>
+
+  <!-- Desktop Links -->
+  <div class="hidden md:flex space-x-6 font-medium">
+    <a href="#home" class="hover:text-blue-400">Home</a>
+    <a href="#features" class="hover:text-blue-400">Features</a>
+    <a href="#about" class="hover:text-blue-400">About</a>
+    <a href="#contact" class="hover:text-blue-400">Contact</a>
+  </div>
+
+  <!-- Mobile Hamburger -->
+  <div class="md:hidden">
+    <button id="menu-btn" class="focus:outline-none">
+      <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-[#010c18] flex flex-col items-center py-4 space-y-4 md:hidden">
+    <a href="#home" class="hover:text-blue-400">Home</a>
+    <a href="#features" class="hover:text-blue-400">Features</a>
+    <a href="#about" class="hover:text-blue-400">About</a>
+    <a href="#contact" class="hover:text-blue-400">Contact</a>
+  </div>
+</nav>
+
+<!-- MOBILE MENU TOGGLE SCRIPT -->
+<script>
+  const btn = document.getElementById('menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  btn.addEventListener('click', () => {
+    menu.classList.toggle('hidden');
+  });
+</script>
+
+<!-- HERO -->
+<section id="home" class="relative min-h-screen flex flex-col justify-center items-center text-center px-6 bg-gradient-to-b from-[#010c18] to-[#0a1a2c] overflow-hidden">
+
+  <!-- Background floating shapes with parallax -->
+  <div class="absolute top-10 left-10 w-32 h-32 bg-blue-600 rounded-full opacity-20 floating-shape" data-speed="0.3"></div>
+  <div class="absolute bottom-20 right-20 w-40 h-40 bg-green-600 rounded-full opacity-20 floating-shape" data-speed="0.5"></div>
+
+  <!-- Hero Text -->
+  <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white animate__animated animate__fadeInDown">
+    Find Lost Items in Malawi
+  </h1>
+
+  <p class="mt-4 text-lg sm:text-xl opacity-80 animate__animated animate__fadeInUp max-w-xl hero-subtext" data-speed="0.9">
+    Connecting people who lost items with those who found them. Fast • Secure • Reliable.
+  </p>
+
+  <!-- Floating Icon -->
+  <img src="https://img.icons8.com/ios-filled/120/ffffff/lost-and-found.png"
+       class="mt-10 floating-img w-32 h-32 hero-icon" data-speed="1.2" alt="Lost Item Icon"/>
+
+  <!-- CTA Buttons -->
+  <div class="mt-10 flex flex-col sm:flex-row gap-4 animate__animated animate__zoomIn hero-buttons" data-speed="1">
+    <a href="post.html" class="px-6 py-3 bg-blue-600 rounded-lg hover:bg-blue-700 shadow-xl transition transform hover:scale-105">
+      Post Item
+    </a>
+    <a href="browse.html" class="px-6 py-3 bg-green-600 rounded-lg hover:bg-green-700 shadow-xl transition transform hover:scale-105">
+      Browse Items
+    </a>
+    <a href="search.html" class="px-6 py-3 bg-gray-700 rounded-lg hover:bg-gray-800 shadow-xl transition transform hover:scale-105">
+      Search
+    </a>
+  </div>
+
+</section>
+
+<!-- Parallax Script -->
+<script>
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.pageYOffset;
+
+    document.querySelectorAll('[data-speed]').forEach(el => {
+      const speed = parseFloat(el.getAttribute('data-speed'));
+      el.style.transform = `translateY(${scrollTop * speed}px)`;
+    });
+  });
+</script>
+
+<!-- Floating Animation -->
+<style>
+  .floating-img {
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+  }
+</style>
+
+
+<!-- FEATURES -->
+<section id="features" class="bg-white text-black p-12 fade-section">
+  <h2 class="text-3xl font-bold text-center">Platform Features</h2>
+
+  <!-- Feature Cards -->
+  <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+    <div class="feature-card bg-gray-100 p-6 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
+      <img src="https://img.icons8.com/ios-filled/50/000000/rocket.png" class="mb-3" />
+      <span class="font-bold">Fast Posting</span>
+      <p class="mt-2 text-sm text-gray-600">
+        Report lost or found items in just a few clicks.
+      </p>
+    </div>
+
+    <div class="feature-card bg-gray-100 p-6 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
+      <img src="https://img.icons8.com/ios-filled/50/000000/search--v1.png" class="mb-3" />
+      <span class="font-bold">Smart Search</span>
+      <p class="mt-2 text-sm text-gray-600">
+        Easily find items using keywords, type, and location.
+      </p>
+    </div>
+
+    <div class="feature-card bg-gray-100 p-6 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
+      <img src="https://img.icons8.com/ios-filled/50/000000/marker.png" class="mb-3" />
+      <span class="font-bold">Location-based Matching</span>
+      <p class="mt-2 text-sm text-gray-600">
+        Items are matched with nearby users for faster recovery.
+      </p>
+    </div>
+
+    <div class="feature-card bg-gray-100 p-6 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
+      <img src="https://img.icons8.com/ios-filled/50/000000/alarm.png" class="mb-3" />
+      <span class="font-bold">Real-time Updates</span>
+      <p class="mt-2 text-sm text-gray-600">
+        Receive instant notifications about new lost/found items.
+      </p>
+    </div>
+
+    <div class="feature-card bg-gray-100 p-6 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
+      <img src="https://img.icons8.com/ios-filled/50/000000/touchscreen-smartphone.png" class="mb-3" />
+      <span class="font-bold">Mobile Friendly</span>
+      <p class="mt-2 text-sm text-gray-600">
+        Access the platform anytime, anywhere from your phone.
+      </p>
+    </div>
+
+    <div class="feature-card bg-gray-100 p-6 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
+      <img src="https://img.icons8.com/ios-filled/50/000000/security-checked.png" class="mb-3" />
+      <span class="font-bold">Secure & Verified</span>
+      <p class="mt-2 text-sm text-gray-600">
+        Communicate securely via verified channels like WhatsApp.
+      </p>
+    </div>
+
+  </div>
+
+  <!-- Divider -->
+  <hr class="my-12 border-gray-300">
+
+  <!-- Statistics Cards -->
+  <div class="text-center">
+    <h3 class="text-2xl font-bold mb-6">Platform Statistics</h3>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+      <div class="stat-card bg-blue-100 p-6 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
+        <img src="https://img.icons8.com/ios-filled/50/000000/box.png" class="mx-auto mb-3" />
+        <span class="block text-3xl font-bold mt-2 counter" data-target="1254">0</span>
+        <span class="text-sm text-gray-700">Items Posted</span>
+      </div>
+
+      <div class="stat-card bg-green-100 p-6 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
+        <img src="https://img.icons8.com/ios-filled/50/000000/checked--v1.png" class="mx-auto mb-3" />
+        <span class="block text-3xl font-bold mt-2 counter" data-target="842">0</span>
+        <span class="text-sm text-gray-700">Items Found</span>
+      </div>
+
+      <div class="stat-card bg-yellow-100 p-6 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
+        <img src="https://img.icons8.com/ios-filled/50/000000/user-group-man-man.png" class="mx-auto mb-3" />
+        <span class="block text-3xl font-bold mt-2 counter" data-target="3210">0</span>
+        <span class="text-sm text-gray-700">Active Users</span>
+      </div>
+
+      <div class="stat-card bg-purple-100 p-6 rounded-lg shadow hover:shadow-lg transition-shadow duration-300">
+        <img src="https://img.icons8.com/ios-filled/50/000000/time.png" class="mx-auto mb-3" />
+        <span class="block text-3xl font-bold mt-2 counter" data-target="24">0</span>
+        <span class="text-sm text-gray-700">Platform Uptime</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ABOUT -->
+<section id="about" class="min-h-screen p-12 bg-blue-900 fade-section flex flex-col md:flex-row items-center gap-8">
+  <img src="https://img.icons8.com/ios-filled/150/ffffff/lost-and-found.png" 
+       class="floating-img w-48 h-48 animate-bounce" alt="About Icon">
+
+  <div>
+    <h2 class="text-3xl font-bold">About MW Lost & Found</h2>
+    <p class="mt-4 max-w-xl opacity-90 text-lg">
+      MW Lost & Found is a trusted Malawi-based platform that bridges the gap between people who lose items and those who find them.
+      <br><br>
+      Our platform provides:
+    </p>
+    <ul class="mt-4 list-disc list-inside text-lg space-y-2">
+      <li>Fast and easy reporting of lost and found items</li>
+      <li>Secure communication via WhatsApp to protect privacy</li>
+      <li>Real-time notifications and alerts for higher recovery chances</li>
+      <li>Mobile-friendly interface, accessible on all devices</li>
+      <li>Location-based matching to connect nearby users quickly</li>
+      <li>Verified user interactions to ensure safety and trust</li>
+    </ul>
+    <p class="mt-4 max-w-xl opacity-90 text-lg">
+      Our mission is to make item recovery in Malawi simple, efficient, and secure for everyone.
+    </p>
+  </div>
+</section>
+
+<!-- FEATHER ICONS -->
+<script src="https://unpkg.com/feather-icons"></script>
+
+<!-- HOW TO USE -->
+<section id="how-to-use" class="py-16 px-6 bg-[#14202f] text-white fade-section">
+  <h2 class="text-3xl font-bold text-center mb-10">How to Use the Application</h2>
+
+  <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
+
+    <!-- LEFT SIDE: Steps List -->
+    <div class="space-y-4 md:block hidden">
+      <button class="step-btn active-step w-full text-left p-4 bg-[#15202b] rounded-lg font-semibold flex items-center gap-3" data-step="step1">
+        <i data-feather="upload" class="w-5"></i> 1. Posting a Lost or Found Item
+      </button>
+
+      <button class="step-btn w-full text-left p-4 bg-[#15202b] rounded-lg font-semibold flex items-center gap-3" data-step="step2">
+        <i data-feather="search" class="w-5"></i> 2. Searching for an Item
+      </button>
+
+      <button class="step-btn w-full text-left p-4 bg-[#15202b] rounded-lg font-semibold flex items-center gap-3" data-step="step3">
+        <i data-feather="briefcase" class="w-5"></i> 3. Post Boosting & Paid Plans
+      </button>
+
+      <button class="step-btn w-full text-left p-4 bg-[#15202b] rounded-lg font-semibold flex items-center gap-3" data-step="step4">
+        <i data-feather="credit-card" class="w-5"></i> 4. Payments
+      </button>
+    </div>
+
+    <!-- MOBILE ACCORDION -->
+    <div class="md:hidden space-y-4" id="mobile-accordion">
+
+      <!-- Step 1 Mobile -->
+      <div class="border border-gray-700 rounded-lg">
+        <button class="mobile-header w-full flex justify-between items-center p-4">
+          <span class="font-semibold flex items-center gap-2">
+            <i data-feather="upload" class="w-5"></i> Posting an Item
+          </span>
+          <span class="text-xl font-bold">+</span>
+        </button>
+        <div class="mobile-content hidden p-4 bg-[#15202b]">
+          <h3 class="text-xl font-bold mb-2">Posting a Lost or Found Item</h3>
+          <p>Upload an image, add a description, location, and WhatsApp contact. Your post instantly appears.</p>
+        </div>
+      </div>
+
+      <!-- Step 2 Mobile -->
+      <div class="border border-gray-700 rounded-lg">
+        <button class="mobile-header w-full flex justify-between items-center p-4">
+          <span class="font-semibold flex items-center gap-2">
+            <i data-feather="search" class="w-5"></i> Searching for an Item
+          </span>
+          <span class="text-xl font-bold">+</span>
+        </button>
+        <div class="mobile-content hidden p-4 bg-[#15202b]">
+          <h3 class="text-xl font-bold mb-2">Searching for an Item</h3>
+          <p>Filter by item type, location, keywords, or posting date to quickly find matches.</p>
+        </div>
+      </div>
+
+      <!-- Step 3 Mobile -->
+      <div class="border border-gray-700 rounded-lg">
+        <button class="mobile-header w-full flex justify-between items-center p-4">
+          <span class="font-semibold flex items-center gap-2">
+            <i data-feather="briefcase" class="w-5"></i> Boosting & Paid Plans
+          </span>
+          <span class="text-xl font-bold">+</span>
+        </button>
+        <div class="mobile-content hidden p-4 bg-[#15202b] space-y-3">
+          <h3 class="text-xl font-bold mb-2">Boosting & Paid Plans</h3>
+          <p><b>Free:</b> Your post appears once on all social media platforms.</p>
+          <p><b>Basic (MWK 5,000):</b> Promoted twice per day for 5 days.</p>
+          <p><b>Premium (MWK 10,000):</b> Promoted twice daily for 2 full weeks.</p>
+        </div>
+      </div>
+
+      <!-- Step 4 Mobile -->
+      <div class="border border-gray-700 rounded-lg">
+        <button class="mobile-header w-full flex justify-between items-center p-4">
+          <span class="font-semibold flex items-center gap-2">
+            <i data-feather="credit-card" class="w-5"></i> Payments
+          </span>
+          <span class="text-xl font-bold">+</span>
+        </button>
+        <div class="mobile-content hidden p-4 bg-[#15202b] space-y-3">
+          <h3 class="text-xl font-bold mb-2">Payments</h3>
+          <p>We accept multiple payment options for boosting posts:</p>
+          <ul class="list-disc list-inside space-y-1">
+            <li><b>Airtel Money:</b> 088 XXXXXXX</li>
+            <li><b>TNM Mpamba:</b> 099 XXXXXXX</li>
+            <li><b>National Bank:</b> Account Name: MW Lost & Found, Account Number: 123456789</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT SIDE CONTENT -->
+    <div class="md:col-span-2">
+      <div id="step1" class="step-content animate-fade">
+        <h3 class="text-2xl font-bold mb-3">Posting a Lost or Found Item</h3>
+        <p>
+          Click the Post Item button, upload a picture, add a description, select location,
+          and enter WhatsApp contact. Once submitted, your post appears instantly.
+        </p>
+      </div>
+
+      <div id="step2" class="step-content hidden animate-fade">
+        <h3 class="text-2xl font-bold mb-3">Searching for an Item</h3>
+        <p>
+          Go to the Browse or Search page, then use filters such as item type, location,
+          date posted, or keywords to find matches faster.
+        </p>
+      </div>
+
+      <div id="step3" class="step-content hidden animate-fade space-y-6">
+        <h3 class="text-2xl font-bold mb-3">Post Boosting & Paid Plans</h3>
+        <div>
+          <h4 class="font-bold text-lg">Free Posting</h4>
+          <p>Your post appears once on Facebook, WhatsApp, and Twitter.</p>
+        </div>
+        <div>
+          <h4 class="font-bold text-lg">Basic Package – MWK 5,000</h4>
+          <p>We promote your post twice per day for 5 days.</p>
+        </div>
+        <div>
+          <h4 class="font-bold text-lg">Premium Package – MWK 10,000</h4>
+          <p>Promotion runs twice daily for 14 days or until marked found.</p>
+        </div>
+      </div>
+
+      <div id="step4" class="step-content hidden animate-fade space-y-3">
+        <h3 class="text-2xl font-bold mb-3">Payments</h3>
+        <p>We accept multiple payment options for boosting posts:</p>
+        <ul class="list-disc list-inside space-y-1">
+          <li><b>Airtel Money:</b> 088 XXXXXXX</li>
+          <li><b>TNM Mpamba:</b> 099 XXXXXXX</li>
+          <li><b>National Bank:</b> Account Name: MW Lost & Found, Account Number: 123456789</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<script>
+  /* ------- Desktop Step Switching ------- */
+  const buttons = document.querySelectorAll(".step-btn");
+  const contents = document.querySelectorAll(".step-content");
+
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      buttons.forEach(b => b.classList.remove("active-step"));
+      btn.classList.add("active-step");
+
+      const target = btn.dataset.step;
+      contents.forEach(content => {
+        content.classList.add("hidden");
+        if (content.id === target) {
+          content.classList.remove("hidden");
+          content.classList.add("animate-fade");
+        }
+      });
+    });
+  });
+
+  /* ------- Mobile Accordion ------- */
+  const mobileHeaders = document.querySelectorAll(".mobile-header");
+
+  mobileHeaders.forEach(header => {
+    header.addEventListener("click", () => {
+      const content = header.nextElementSibling;
+      const icon = header.querySelector("span:last-child");
+
+      const isOpen = !content.classList.contains("hidden");
+
+      document.querySelectorAll(".mobile-content").forEach(c => c.classList.add("hidden"));
+      document.querySelectorAll(".mobile-header span:last-child").forEach(i => i.textContent = "+");
+
+      if (!isOpen) {
+        content.classList.remove("hidden");
+        icon.textContent = "−";
+      }
+    });
+  });
+
+  feather.replace();
+</script>
+
+<style>
+  .active-step {
+    background-color: #1e2a38 !important;
+    border-left: 4px solid #00b4d8;
+  }
+
+  .step-btn:hover {
+    background-color: #1b2735;
+    transition: background-color 0.25s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-fade {
+    animation: fadeIn 0.4s ease;
+  }
+</style>
+
+
+
+<!-- ANIMATION SCRIPT FOR STATS -->
+<script>
+  const counters = document.querySelectorAll('.counter');
+  counters.forEach(counter => {
+    const updateCount = () => {
+      const target = +counter.getAttribute('data-target');
+      const count = +counter.innerText;
+      const increment = target / 200; // speed
+
+      if(count < target) {
+        counter.innerText = Math.ceil(count + increment);
+        setTimeout(updateCount, 20);
+      } else {
+        counter.innerText = target;
+      }
+    };
+    
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) {
+          updateCount();
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    observer.observe(counter);
+  });
+</script>
+
+<style>
+  .floating-img {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+  }
+</style>
+
+
+<!-- FOOTER -->
+<footer class="bg-[#0b1520] text-white py-12 px-6">
+  <div class="max-w-6xl mx-auto grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    
+    <!-- About -->
+    <div>
+      <h3 class="text-xl font-bold mb-4">MW Lost & Found</h3>
+      <p class="text-gray-300">
+        Helping Malawians find lost items quickly and securely. Connect with others and recover lost possessions with ease.
+      </p>
+    </div>
+
+    <!-- Contact Info -->
+    <div>
+      <h3 class="text-xl font-bold mb-4">Contact Us</h3>
+      <p class="flex items-center gap-2">
+        <img src="https://img.icons8.com/ios-filled/20/ffffff/new-post.png"/>
+        <span class="font-semibold">support@mw-lostitems.com</span>
+      </p>
+
+      <p class="flex items-center gap-2 mt-2">
+        <img src="https://img.icons8.com/ios-filled/20/ffffff/phone.png"/>
+        <span class="font-semibold">+265 999 000 000</span>
+      </p>
+
+      <p class="flex items-center gap-2 mt-2">
+        <img src="https://img.icons8.com/ios-filled/20/ffffff/internet.png"/>
+        <span class="font-semibold">www.mw-lostitems.com</span>
+      </p>
+    </div>
+
+    <!-- Follow Us -->
+    <div>
+      <h3 class="text-xl font-bold mb-4">Follow Us</h3>
+      <div class="flex flex-col gap-2 text-gray-300">
+
+        <a href="#" class="flex items-center gap-2 hover:text-blue-400 animate-bounce-slow">
+          <img src="https://img.icons8.com/ios-filled/20/ffffff/facebook-new.png"/>
+          <span class="font-semibold">@MWLostAndFound</span>
+        </a>
+
+        <a href="#" class="flex items-center gap-2 hover:text-blue-400 animate-bounce-slow">
+          <img src="https://img.icons8.com/ios-filled/20/ffffff/twitter.png"/>
+          <span class="font-semibold">@MWLostFound</span>
+        </a>
+
+        <a href="#" class="flex items-center gap-2 hover:text-blue-400 animate-bounce-slow">
+          <img src="https://img.icons8.com/ios-filled/20/ffffff/instagram-new.png"/>
+          <span class="font-semibold">@MWLostFound</span>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div>
+      <h3 class="text-xl font-bold mb-4">Quick Links</h3>
+      <ul class="space-y-2 text-gray-300">
+        <li><a href="index.html" class="hover:text-blue-400">Home</a></li>
+        <li><a href="post.html" class="hover:text-blue-400">Post Item</a></li>
+        <li><a href="browse.html" class="hover:text-blue-400">Browse Items</a></li>
+        <li><a href="search.html" class="hover:text-blue-400">Search</a></li>
+        <li><a href="#about" class="hover:text-blue-400">About</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="mt-8 text-center text-gray-500 text-sm">
+    &copy; 2025 MW Lost & Found. All rights reserved.
+  </div>
+</footer>
+
+
+<!-- CUSTOM ANIMATION -->
+<style>
+  @keyframes bounce-slow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+  .animate-bounce-slow {
+    display: inline-block;
+    animation: bounce-slow 2s infinite;
+  }
+</style>
+
+
+
+<!-- Floating Post Button -->
+<!-- <a href="post.html" class="floating-btn">+ Post Item</a> -->
+
+<script>
+  // NAVBAR COLOR CHANGE ON SCROLL
+  window.addEventListener("scroll", () => {
+    const nav = document.getElementById("navbar");
+    if(window.scrollY>50) nav.classList.add("scrolled");
+    else nav.classList.remove("scrolled");
+  });
+
+  // FADE-IN ON SCROLL
+  const observer = new IntersectionObserver((entries)=> {
+    entries.forEach(entry => {
+      if(entry.isIntersecting) entry.target.classList.add("visible");
+    });
+  });
+  document.querySelectorAll(".fade-section").forEach(section => observer.observe(section));
+</script>
+
+</body>
+</html>

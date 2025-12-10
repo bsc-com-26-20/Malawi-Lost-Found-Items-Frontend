@@ -1,0 +1,89 @@
+/* NAV SCROLL EFFECT */
+#navbar {
+    background-color: transparent;
+  }
+  
+  #navbar.scrolled {
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    padding: 10px 24px !important;
+  }
+  
+  /* FEATURE CARDS */
+  .feature-card {
+    padding: 20px;
+    background: #f3f4f6;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  /* FADE SECTION (initial invisible) */
+  .fade-section {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.7s ease-out;
+  }
+  
+  /* When visible */
+  .fade-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Floating Post Item Button */
+.floating-btn {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: #2563eb; /* Blue-600 */
+    color: white;
+    padding: 14px 22px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-decoration: none;
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+    z-index: 999;
+  }
+  
+  /* Hover effect */
+  .floating-btn:hover {
+    background: #1e40af; /* Blue-800 */
+    transform: translateY(-4px);
+    box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.5);
+  }
+  
+  /* Small screen adjustments */
+  @media (max-width: 600px) {
+    .floating-btn {
+      padding: 12px 18px;
+      font-size: 1rem;
+      bottom: 18px;
+      right: 18px;
+    }
+  }
+
+  
+  #navbar.scrolled {
+    background-color: rgba(0, 0, 0, 0.85); /* Dark background on scroll */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
+  .fade-section {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .fade-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
