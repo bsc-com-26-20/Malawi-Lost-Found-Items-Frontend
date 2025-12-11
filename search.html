@@ -97,21 +97,58 @@
 <body class="text-white">
 
   <!-- NAVBAR -->
-  <nav id="navbar" class="fixed top-0 left-0 w-full px-6 py-4 flex justify-between items-center z-50 bg-transparent">
-    <h1 class="text-2xl font-bold">MW Lost & Found</h1>
-    <div class="flex items-center">
-      <div class="nav-links">
-        <a href="index.html" class="hover:text-blue-400">Home</a>
-        <a href="post.html" class="hover:text-blue-400">Post Item</a>
-        <a href="browse.html" class="hover:text-blue-400">Browse</a>
-      </div>
-      <div class="hamburger ml-4" id="hamburgerBtn">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
+  <nav id="navbar" class="fixed top-0 left-0 w-full px-6 py-4 flex justify-between items-center z-50 transition-all duration-300 bg-transparent">
+    <h1 class="text-l font-bold">Search Lost Items</h1>
+
+    <!-- Desktop Links -->
+    <div class="hidden md:flex space-x-6 font-medium">
+      <a href="index.html" class="hover:text-blue-400">Home</a>
+      <a href="browse.html" class="hover:text-blue-400">Browse</a>
+      <a href="post.html" class="hover:text-blue-400">Post Item</a>
+    </div>
+
+    <!-- Mobile Hamburger -->
+    <div class="md:hidden">
+      <button id="menu-btn" class="focus:outline-none">
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-[#010c18] flex flex-col items-center py-4 space-y-4 md:hidden">
+      <a href="index.html" class="hover:text-blue-400">Home</a>
+      <a href="browse.html" class="hover:text-blue-400">Browse</a>
+      <a href="post.html" class="hover:text-blue-400">Post Item</a>
     </div>
   </nav>
+
+  <!-- MOBILE MENU TOGGLE SCRIPT -->
+  <script>
+    const btn = document.getElementById('menu-btn');
+    const menu = document.getElementById('mobile-menu');
+    btn.addEventListener('click', () => {
+      menu.classList.toggle('hidden');
+    });
+  </script>
+
+  <script>
+    // NAVBAR COLOR CHANGE ON SCROLL
+    window.addEventListener("scroll", () => {
+      const nav = document.getElementById("navbar");
+      if(window.scrollY>50) nav.classList.add("scrolled");
+      else nav.classList.remove("scrolled");
+    });
+
+    // FADE-IN ON SCROLL
+    const observer = new IntersectionObserver((entries)=> {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) entry.target.classList.add("visible");
+      });
+    });
+    document.querySelectorAll(".fade-section").forEach(section => observer.observe(section));
+  </script>
 
   <!-- PAGE HEADER -->
   <section class="pt-28 pb-6 px-6 text-center">
